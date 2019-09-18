@@ -1,6 +1,8 @@
 package calendar
 
-import "log"
+import (
+	"log"
+)
 
 //Pair - pair of EventNodes
 type Pair struct {
@@ -31,8 +33,8 @@ func Insert(node *EventNode, c *EventNode) {
 	}
 }
 
-//GetOverlap - gets the events that have overlapping times with the candidate
-func GetOverlap(root, candidate *EventNode) []Pair {
+//getOverlap - gets the events that have overlapping times with the candidate
+func getOverlap(root, candidate *EventNode) []Pair {
 
 	//var overlap []Pair
 	overlap := []Pair{}
@@ -42,13 +44,36 @@ func GetOverlap(root, candidate *EventNode) []Pair {
 	}
 
 	if root.HasLeftChild() && candidate.Ev.Start.Before(root.Ev.Start) {
-		overLappingPairs := GetOverlap(root.Left, candidate)
+		overLappingPairs := getOverlap(root.Left, candidate)
 		overlap = append(overlap, overLappingPairs...)
 	}
 
 	if root.HasRightChild() && candidate.Ev.End.After(root.Ev.Start) {
-		overLappingPairs := GetOverlap(root.Right, candidate)
+		overLappingPairs := getOverlap(root.Right, candidate)
 		overlap = append(overlap, overLappingPairs...)
+	}
+
+	return overlap
+}
+
+//GetOverlappingEvents - returns a series of Pair structs containing overlapping events
+func GetOverlappingEvents(events ...Event) []Pair {
+
+	var root *EventNode
+	overlap := []Pair{}
+
+	for _, event := range events {
+		if root == nil {
+			//Look into this
+			t := event.ToEventNode()
+			root = &t
+			continue
+		}
+
+		en := event.ToEventNode()
+		result := getOverlap(root, &en)
+		overlap = append(overlap, result...)
+		Insert(root, &en)
 	}
 
 	return overlap

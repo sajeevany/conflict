@@ -27,33 +27,11 @@ func main() {
 	e4 := calendar.Event{Start: s2019_9_6_7, End: s2019_9_6_10}
 	e5 := calendar.Event{Start: s2019_9_6_4, End: s2019_9_6_10}
 
-	overlaps := getOverlappingEvents([]calendar.Event{e0, e1, e2, e3, e4, e5}...)
+	overlaps := calendar.GetOverlappingEvents([]calendar.Event{e0, e1, e2, e3, e4, e5}...)
 
 	for _, i := range overlaps {
 		fmt.Printf("Pair %v %v\n", i.Can.Ev, i.Node.Ev)
 	}
 	fmt.Println(overlaps)
 
-}
-
-func getOverlappingEvents(events ...calendar.Event) []calendar.Pair {
-
-	var root *calendar.EventNode
-	overlap := []calendar.Pair{}
-
-	for _, event := range events {
-		if root == nil {
-			//Look into this
-			t := event.ToEventNode()
-			root = &t
-			continue
-		}
-
-		en := event.ToEventNode()
-		result := calendar.GetOverlap(root, &en)
-		overlap = append(overlap, result...)
-		calendar.Insert(root, &en)
-	}
-
-	return overlap
 }
