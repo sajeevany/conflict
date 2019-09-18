@@ -65,12 +65,12 @@ func GetOverlappingEvents(events ...Event) []Pair {
 	for _, event := range events {
 		if root == nil {
 			//Look into this
-			t := event.ToEventNode()
+			t, _ := event.ToEventNode()
 			root = &t
 			continue
 		}
 
-		en := event.ToEventNode()
+		en, _ := event.ToEventNode()
 		result := getOverlap(root, &en)
 		overlap = append(overlap, result...)
 		Insert(root, &en)

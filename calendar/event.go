@@ -1,6 +1,8 @@
 package calendar
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"time"
 )
@@ -19,8 +21,15 @@ type EventNode struct {
 }
 
 //ToEventNode - Converts an event struct to an EventNode
-func (e Event) ToEventNode() EventNode {
-	return EventNode{Ev: e}
+func (e Event) ToEventNode() (EventNode, error) {
+
+	if e.End.Before(e.Start) {
+		msg := fmt.Sprintf("The specified end time <%v>  occurs before the start time <%v>.\n", e.End, e.Start)
+		log.Println(msg)
+		return EventNode{}, errors.New(msg)
+	}
+
+	return EventNode{Ev: e}, nil
 }
 
 //Overlaps - returns true if the time frame overlaps

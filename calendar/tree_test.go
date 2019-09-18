@@ -20,12 +20,12 @@ func TestInsert(t *testing.T) {
 	s2019_9_6_7, _ := time.Parse(layout, "2019-09-06 7:00:00.000000000 +0000 UTC")
 	s2019_9_6_10, _ := time.Parse(layout, "2019-09-06 10:00:00.000000000 +0000 UTC")
 
-	e0 := calendar.Event{Start: s2019_9_6_6, End: s2019_9_6_8}.ToEventNode()
-	e1 := calendar.Event{Start: s2019_9_6_4, End: s2019_9_6_8}.ToEventNode()
-	e2 := calendar.Event{Start: s2019_9_6_4, End: s2019_9_6_5}.ToEventNode()
-	e3 := calendar.Event{Start: s2019_9_6_6, End: s2019_9_6_7}.ToEventNode()
-	e4 := calendar.Event{Start: s2019_9_6_7, End: s2019_9_6_10}.ToEventNode()
-	e5 := calendar.Event{Start: s2019_9_6_4, End: s2019_9_6_10}.ToEventNode()
+	e0, _ := calendar.Event{Start: s2019_9_6_6, End: s2019_9_6_8}.ToEventNode()
+	e1, _ := calendar.Event{Start: s2019_9_6_4, End: s2019_9_6_8}.ToEventNode()
+	e2, _ := calendar.Event{Start: s2019_9_6_4, End: s2019_9_6_5}.ToEventNode()
+	e3, _ := calendar.Event{Start: s2019_9_6_6, End: s2019_9_6_7}.ToEventNode()
+	e4, _ := calendar.Event{Start: s2019_9_6_7, End: s2019_9_6_10}.ToEventNode()
+	e5, _ := calendar.Event{Start: s2019_9_6_4, End: s2019_9_6_10}.ToEventNode()
 
 	calendar.Insert(&e0, &e1)
 	calendar.Insert(&e0, &e2)
