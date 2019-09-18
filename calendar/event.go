@@ -55,7 +55,7 @@ func (e EventNode) HasRightChild() bool {
 /*CompareTo - returns a positive number if the eventNode being compared is
  *larger, 0 if equal, and a negative number if less.
  */
-func (e EventNode) CompareTo(c *EventNode) int {
+func (e EventNode) CompareTo(c *EventNode) (int, error) {
 
 	/*
 	 * Greater than -> c.low > e.low
@@ -65,25 +65,25 @@ func (e EventNode) CompareTo(c *EventNode) int {
 
 	//Candidate starts after
 	if c.Ev.Start.After(e.Ev.Start) {
-		return 1
+		return 1, nil
 	}
 
 	//Candidate starts before
 	if c.Ev.Start.Before(e.Ev.Start) {
-		return -1
+		return -1, nil
 	}
 
 	//Candidate starts at same time
 	if c.Ev.Start.Equal(e.Ev.Start) {
 		if c.Ev.End.Equal(e.Ev.End) {
 			//Equal ending
-			return 0
+			return 0, nil
 		}
 		//ending is before/after
-		return -1
+		return -1, nil
 	}
 
 	//TODO Reevaluate this after writing unit tests. Compiler is issuing warning when not return past this point
-	log.Fatalf("unexpected case with events %v and %v", e, c)
-	return 0
+	msg := fmt.Sprintf("unexpected case with events %v and %v", e, c)
+	return 0, errors.New(msg)
 }

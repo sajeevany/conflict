@@ -80,7 +80,7 @@ func TestCompareTo(t *testing.T) {
 
 	//Run CompareTo operation for each pair and compare to expected value
 	for _, c := range comp {
-		val := c.p.CompareTo(&c.s)
+		val, _ := c.p.CompareTo(&c.s)
 
 		if val != c.exp {
 			t.Errorf("Expected compareTo result of nodes %v and %v to be %v but was %v. Failure.", c.p, c.s, c.exp, val)

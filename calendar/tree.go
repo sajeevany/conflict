@@ -10,16 +10,27 @@ type Pair struct {
 }
 
 //Insert the candidate in the appropriate subtree of the node.
-func Insert(node *EventNode, c *EventNode) {
+func Insert(node *EventNode, c *EventNode) error {
 
-	if node.CompareTo(c) < 1 {
+	cmp, err := node.CompareTo(c)
+
+	if err != nil {
+		log.Println(err)
+		return err
+	}
+
+	if cmp < 1 {
 		//insert left
 		if node.Left == nil {
 			log.Printf("Left doesn't exist. Adding %v to left of %v", c, node)
 			node.Left = c
 		} else {
 			log.Printf("Left already exists, moving into %v with %v\n", node.Left, c)
-			Insert(node.Left, c)
+			err = Insert(node.Left, c)
+
+			if err != nil {
+				return err
+			}
 		}
 	} else {
 		//insert right
@@ -28,9 +39,15 @@ func Insert(node *EventNode, c *EventNode) {
 			node.Right = c
 		} else {
 			log.Printf("Right already exists, moving into %v with %v\n", node.Right, c)
-			Insert(node.Right, c)
+			err = Insert(node.Right, c)
+
+			if err != nil {
+				return err
+			}
 		}
 	}
+
+	return nil
 }
 
 //getOverlap - gets the events that have overlapping times with the candidate
