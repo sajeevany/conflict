@@ -22,10 +22,10 @@ func Insert(node *EventNode, c *EventNode) error {
 	if cmp < 1 {
 		//insert left
 		if node.Left == nil {
-			log.Printf("Left doesn't exist. Adding %v to left of %v", c, node)
+			//log.Printf("Left doesn't exist. Adding %v to left of %v", c, node)
 			node.Left = c
 		} else {
-			log.Printf("Left already exists, moving into %v with %v\n", node.Left, c)
+			//log.Printf("Left already exists, moving into %v with %v\n", node.Left, c)
 			err = Insert(node.Left, c)
 
 			if err != nil {
@@ -35,10 +35,10 @@ func Insert(node *EventNode, c *EventNode) error {
 	} else {
 		//insert right
 		if node.Right == nil {
-			log.Printf("Right doesn't exist. Adding %v to Right of %v", c, node)
+			//log.Printf("Right doesn't exist. Adding %v to Right of %v", c, node)
 			node.Right = c
 		} else {
-			log.Printf("Right already exists, moving into %v with %v\n", node.Right, c)
+			//log.Printf("Right already exists, moving into %v with %v\n", node.Right, c)
 			err = Insert(node.Right, c)
 
 			if err != nil {
