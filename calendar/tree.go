@@ -55,10 +55,13 @@ func getOverlap(node, candidate *EventNode) []Pair {
 
 	overlap := []Pair{}
 
+	//Check if this candidate node overlaps the current node
 	if candidate.Overlaps(*node) {
 		overlap = append(overlap, Pair{Can: candidate.Ev, Node: node.Ev})
 	}
 
+	//If the current node has a left child and the start time of candidate occurs prior
+	//to the node's start time, then go to the left child and search for any overlaps
 	if node.HasLeftChild() && candidate.Ev.Start.Before(node.Ev.Start) {
 		overLappingPairs := getOverlap(node.Left, candidate)
 		overlap = append(overlap, overLappingPairs...)
@@ -72,24 +75,36 @@ func getOverlap(node, candidate *EventNode) []Pair {
 	return overlap
 }
 
-//GetOverlappingEvents - returns a series of Pair structs containing overlapping events
-func GetOverlappingEvents(events ...Event) []Pair {
+//GetOverlappingEvents - returns a series of Pair structs containing overlapping events. Possible
+//error can occur if the event is misformatted.
+//ie. event.start > event.end
+func GetOverlappingEvents(events ...Event) ([]Pair, error) {
 
 	var root *EventNode
 	overlap := []Pair{}
 
 	for _, event := range events {
 		if root == nil {
+			//Set the root node once. If events is empty then an empty slice will be returned.
 			t, _ := event.ToEventNode()
 			root = &t
 			continue
 		}
 
+		//Covert event to an EventNode in order to allow left/right child relationships
 		en, _ := event.ToEventNode()
+
+		//Traverse tree and find any nodes that overlap the event that is going to added. Prevents duplicate [A,B] [B,A] pairs
 		result := getOverlap(root, &en)
+
+		//Append the overlapping pairs to the list
 		overlap = append(overlap, result...)
-		Insert(root, &en)
+
+		//Safe to insert the tree.
+		if err := Insert(root, &en); err != nil {
+			return nil, err
+		}
 	}
 
-	return overlap
+	return overlap, nil
 }
