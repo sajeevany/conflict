@@ -30,7 +30,7 @@ func main() {
 	overlaps := calendar.GetOverlappingEvents([]calendar.Event{e0, e1, e2, e3, e4, e5}...)
 
 	for _, i := range overlaps {
-		fmt.Printf("Pair %v %v\n", i.Can.Ev, i.Node.Ev)
+		fmt.Printf("Pair %v %v\n", i.Can, i.Node)
 	}
 	fmt.Println(overlaps)
 

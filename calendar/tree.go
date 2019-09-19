@@ -6,7 +6,7 @@ import (
 
 //Pair - pair of EventNodes
 type Pair struct {
-	Can, Node EventNode
+	Can, Node Event
 }
 
 //Insert the candidate in the appropriate subtree of the node.
@@ -51,22 +51,21 @@ func Insert(node *EventNode, c *EventNode) error {
 }
 
 //getOverlap - gets the events that have overlapping times with the candidate
-func getOverlap(root, candidate *EventNode) []Pair {
+func getOverlap(node, candidate *EventNode) []Pair {
 
-	//var overlap []Pair
 	overlap := []Pair{}
 
-	if candidate.Overlaps(*root) {
-		overlap = append(overlap, Pair{Can: *candidate, Node: *root})
+	if candidate.Overlaps(*node) {
+		overlap = append(overlap, Pair{Can: candidate.Ev, Node: node.Ev})
 	}
 
-	if root.HasLeftChild() && candidate.Ev.Start.Before(root.Ev.Start) {
-		overLappingPairs := getOverlap(root.Left, candidate)
+	if node.HasLeftChild() && candidate.Ev.Start.Before(node.Ev.Start) {
+		overLappingPairs := getOverlap(node.Left, candidate)
 		overlap = append(overlap, overLappingPairs...)
 	}
 
-	if root.HasRightChild() && candidate.Ev.End.After(root.Ev.Start) {
-		overLappingPairs := getOverlap(root.Right, candidate)
+	if node.HasRightChild() && candidate.Ev.End.After(node.Ev.Start) {
+		overLappingPairs := getOverlap(node.Right, candidate)
 		overlap = append(overlap, overLappingPairs...)
 	}
 
@@ -81,7 +80,6 @@ func GetOverlappingEvents(events ...Event) []Pair {
 
 	for _, event := range events {
 		if root == nil {
-			//Look into this
 			t, _ := event.ToEventNode()
 			root = &t
 			continue
